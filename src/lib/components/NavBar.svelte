@@ -4,7 +4,6 @@
 -->
 <script lang="ts">
   import { page } from "$app/stores";
-  import { browser } from "$app/environment";
 
   // 導航項目配置
   const navItems = [
@@ -14,13 +13,13 @@
     { href: "/contact", label: "聯絡我" },
   ];
 
-  // 當前路徑
-  $: currentPath = browser ? $page.url.pathname : "";
+  // 當前路徑 - 使用響應式語句確保更新
+  $: currentPath = $page?.url?.pathname || "";
 
   // 檢查當前路由是否為活躍狀態
-  function isActive(href: string): boolean {
+  $: isActive = (href: string): boolean => {
     return currentPath === href;
-  }
+  };
 </script>
 
 <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
@@ -42,7 +41,7 @@
           {#each navItems as item}
             <a
               href={item.href}
-              class="nav-link {isActive(item.href) ? 'active' : ''}"
+              class="nav-link {isActive(item.href) ? 'text-blue-600' : 'text-gray-600'} hover:text-gray-900 font-medium transition-colors duration-200"
               aria-current={isActive(item.href) ? "page" : undefined}
             >
               {item.label}

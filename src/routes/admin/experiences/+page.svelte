@@ -31,17 +31,17 @@
   }
   
   // 處理刪除表單提交
-  function handleDelete(id: number) {
-    return async ({ result, update }: any) => {
+  function handleDelete(_id: number) {
+    return async ({ result, update }: { result: any; update: () => Promise<void> }) => {
       deletingId = null;
-      
+
       if (result.type === 'success') {
         showSuccess = true;
         setTimeout(() => {
           showSuccess = false;
         }, 3000);
       }
-      
+
       await update();
     };
   }
@@ -208,12 +208,13 @@
                 <div class="flex items-center justify-end space-x-2">
                   <!-- 查看按鈕 -->
                   {#if experience.company_url}
-                    <a 
-                      href={experience.company_url} 
-                      target="_blank" 
+                    <a
+                      href={experience.company_url}
+                      target="_blank"
                       rel="noopener noreferrer"
                       class="text-blue-600 hover:text-blue-900"
                       title="查看公司網站"
+                      aria-label="查看公司網站"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -222,10 +223,11 @@
                   {/if}
                   
                   <!-- 編輯按鈕 -->
-                  <a 
-                    href="/admin/experiences/{experience.id}/edit" 
+                  <a
+                    href="/admin/experiences/{experience.id}/edit"
                     class="text-indigo-600 hover:text-indigo-900"
                     title="編輯經歷"
+                    aria-label="編輯經歷"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -243,7 +245,7 @@
                     <button
                       type="submit"
                       disabled={deletingId === experience.id}
-                      on:click={(event) => confirmDelete(experience.company, experience.position, event)}
+                      on:click={(event: Event) => confirmDelete(experience.company, experience.position, event)}
                       class="text-red-600 hover:text-red-900 disabled:opacity-50"
                       title="刪除經歷"
                     >

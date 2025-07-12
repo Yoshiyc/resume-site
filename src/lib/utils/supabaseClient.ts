@@ -10,6 +10,8 @@ const supabaseUrl = 'https://ledrgyyfreebbncgdyvw.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlZHJneXlmcmVlYmJuY2dkeXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxMTA2MjksImV4cCI6MjA2NzY4NjYyOX0.Ab0bFNn8iMT6Lvmv420qmisA0_Zy1GaPeb6cR_FTD3o';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// 暫時使用同一個客戶端，直到我們解決 RLS 問題
+export const supabaseAdmin = supabase;
 
 // ===== 資料型別定義 =====
 
@@ -83,6 +85,17 @@ export interface Experience {
   sort_order: number;
   created_at: string;
   updated_at: string;
+}
+
+// 學歷型別
+export interface Education {
+  id: number;
+  school: string;
+  department: string;
+  degree: string;
+  start_date: string;
+  end_date?: string;
+  description?: string;
 }
 
 // 聯絡訊息型別
@@ -216,6 +229,25 @@ export async function getExperiences(): Promise<Experience[]> {
     return data || [];
   } catch (error) {
     console.error('Failed to fetch experiences:', error);
+    return [];
+  }
+}
+
+/**
+ * 獲取學歷列表
+ * @returns Promise<Education[]> 學歷列表
+ */
+export async function getEducations(): Promise<Education[]> {
+  try {
+    const { data, error } = await supabase
+      .from('educations')
+      .select('*')
+      .order('start_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Failed to fetch educations:', error);
     return [];
   }
 }
@@ -416,6 +448,105 @@ export async function getProject(id: number): Promise<Project | null> {
     return data;
   } catch (error) {
     console.error('Failed to fetch project:', error);
+    return null;
+  }
+}
+
+/**
+ * 新增或更新學歷
+ * @param education 學歷資料
+ * @returns Promise<{ success: boolean; error?: string; details?: any }> 操作結果
+ */
+export async function upsertEducation(education: Partial<Education>): Promise<{ success: boolean; error?: string; details?: any }> {
+  try {
+    let result;
+
+    if (education.id) {
+      // 如果有 ID，更新現有學歷
+      result = await supabaseAdmin
+        .from('educations')
+        .update(education)
+        .eq('id', education.id);
+    } else {
+      // 如果沒有 ID，新增學歷
+      const cleanEducation = Object.fromEntries(
+        Object.entries(education).filter(([_, value]) => value !== undefined)
+      );
+
+      result = await supabaseAdmin
+        .from('educations')
+        .insert([cleanEducation])
+        .select();
+    }
+
+    if (result.error) {
+      console.error('Supabase upsert education error:', result.error);
+      return {
+        success: false,
+        error: result.error.message,
+        details: result.error
+      };
+    }
+
+    return { success: true };
+
+  } catch (error) {
+    console.error('Failed to upsert education - Unexpected error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : '未知錯誤'
+    };
+  }
+}
+
+/**
+ * 刪除學歷
+ * @param id 學歷 ID
+ * @returns Promise<{ success: boolean; error?: string }> 操作結果
+ */
+export async function deleteEducation(id: number): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { error } = await supabase
+      .from('educations')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Supabase delete education error:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+
+    return { success: true };
+
+  } catch (error) {
+    console.error('Failed to delete education - Unexpected error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : '未知錯誤'
+    };
+  }
+}
+
+/**
+ * 獲取單一學歷
+ * @param id 學歷 ID
+ * @returns Promise<Education | null> 學歷資料
+ */
+export async function getEducation(id: number): Promise<Education | null> {
+  try {
+    const { data, error } = await supabase
+      .from('educations')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch education:', error);
     return null;
   }
 }

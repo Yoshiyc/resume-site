@@ -37,7 +37,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">技術專長</h2>
-      <p class="text-lg text-gray-600">我專精於現代 Web 開發技術</p>
+      <p class="text-lg text-gray-600">我能結合 AI 工具獨立完成網站開發與部署</p>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -48,7 +48,9 @@
           </svg>
         </div>
         <h3 class="text-xl font-semibold mb-2">前端開發</h3>
-        <p class="text-gray-600">SvelteKit, React, Vue.js, TypeScript</p>
+        <p class="text-gray-600">SvelteKit、Tailwind CSS、JavaScript
+          <br>
+          具備從零開發響應式網站的能力，能整合 UI 框架與資料串接，並使用 AI 工具提升開發效率。</p>
       </div>
       
       <div class="card p-6 text-center">
@@ -58,7 +60,8 @@
           </svg>
         </div>
         <h3 class="text-xl font-semibold mb-2">後端開發</h3>
-        <p class="text-gray-600">Node.js, Python, Supabase, PostgreSQL</p>
+        <p class="text-gray-600">Firebase、Supabase、PostgreSQL表單處理
+          <br>能設計基本資料結構，串接後端 API，完成會員系統、購物車與分類搜尋等功能。</p>
       </div>
       
       <div class="card p-6 text-center">
@@ -67,8 +70,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
           </svg>
         </div>
-        <h3 class="text-xl font-semibold mb-2">設計與部署</h3>
-        <p class="text-gray-600">Tailwind CSS, Figma, Vercel, GitHub</p>
+        <h3 class="text-xl font-semibold mb-2">AI工具與部署</h3>
+        <p class="text-gray-600">ChatGPT、Augment、Vercel、GitHub
+          <br>
+          熟練使用 AI 工具協助開發與除錯，能透過 GitHub 版本管理並使用 Vercel 快速部署網站。</p>
       </div>
     </div>
   </div>

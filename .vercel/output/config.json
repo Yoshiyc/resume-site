@@ -1,0 +1,103 @@
+{
+	"version": 3,
+	"routes": [
+		{
+			"src": "/_app/immutable/.+",
+			"headers": {
+				"cache-control": "public, immutable, max-age=31536000"
+			}
+		},
+		{
+			"handle": "filesystem"
+		},
+		{
+			"src": "^/?(?:/__data.json)?$",
+			"dest": "/"
+		},
+		{
+			"src": "^/about/?(?:/__data.json)?$",
+			"dest": "/about"
+		},
+		{
+			"src": "^/admin/?(?:/__data.json)?$",
+			"dest": "/admin"
+		},
+		{
+			"src": "^/admin/about/?(?:/__data.json)?$",
+			"dest": "/admin/about"
+		},
+		{
+			"src": "^/admin/educations/?(?:/__data.json)?$",
+			"dest": "/admin/educations"
+		},
+		{
+			"src": "^/admin/educations/new/?(?:/__data.json)?$",
+			"dest": "/admin/educations/new"
+		},
+		{
+			"src": "^/admin/educations/([^/]+?)/edit/?(?:/__data.json)?$",
+			"dest": "/admin/educations/[id]/edit"
+		},
+		{
+			"src": "^/admin/experiences/?(?:/__data.json)?$",
+			"dest": "/admin/experiences"
+		},
+		{
+			"src": "^/admin/experiences/new/?(?:/__data.json)?$",
+			"dest": "/admin/experiences/new"
+		},
+		{
+			"src": "^/admin/experiences/([^/]+?)/edit/?(?:/__data.json)?$",
+			"dest": "/admin/experiences/[id]/edit"
+		},
+		{
+			"src": "^/admin/login/?(?:/__data.json)?$",
+			"dest": "/admin/login"
+		},
+		{
+			"src": "^/admin/logout/?(?:/__data.json)?$",
+			"dest": "/admin/logout"
+		},
+		{
+			"src": "^/admin/messages/?(?:/__data.json)?$",
+			"dest": "/admin/messages"
+		},
+		{
+			"src": "^/admin/projects/?(?:/__data.json)?$",
+			"dest": "/admin/projects"
+		},
+		{
+			"src": "^/admin/projects/new/?(?:/__data.json)?$",
+			"dest": "/admin/projects/new"
+		},
+		{
+			"src": "^/admin/projects/([^/]+?)/edit/?(?:/__data.json)?$",
+			"dest": "/admin/projects/[id]/edit"
+		},
+		{
+			"src": "^/admin/skills/?(?:/__data.json)?$",
+			"dest": "/admin/skills"
+		},
+		{
+			"src": "^/admin/skills/new/?(?:/__data.json)?$",
+			"dest": "/admin/skills/new"
+		},
+		{
+			"src": "^/admin/skills/([^/]+?)/edit/?(?:/__data.json)?$",
+			"dest": "/admin/skills/[id]/edit"
+		},
+		{
+			"src": "^/contact/?(?:/__data.json)?$",
+			"dest": "/contact"
+		},
+		{
+			"src": "^/projects/?(?:/__data.json)?$",
+			"dest": "/projects"
+		},
+		{
+			"src": "/.*",
+			"dest": "/![-]/catchall"
+		}
+	],
+	"overrides": {}
+}

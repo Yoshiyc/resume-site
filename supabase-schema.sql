@@ -80,7 +80,21 @@ CREATE TABLE IF NOT EXISTS site_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. 更新現有的 projects 表，新增更多欄位
+-- 6. 學歷表 (educations)
+CREATE TABLE IF NOT EXISTS educations (
+  id BIGSERIAL PRIMARY KEY,
+  school TEXT NOT NULL,
+  department TEXT,
+  degree TEXT NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE, -- NULL 表示至今
+  description TEXT,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 7. 更新現有的 projects 表，新增更多欄位
 ALTER TABLE projects ADD COLUMN IF NOT EXISTS featured BOOLEAN DEFAULT FALSE;
 ALTER TABLE projects ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
 ALTER TABLE projects ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'completed'; -- 'in-progress', 'completed', 'archived'
@@ -94,6 +108,7 @@ CREATE INDEX IF NOT EXISTS idx_skills_category ON skills(category);
 CREATE INDEX IF NOT EXISTS idx_skills_featured ON skills(is_featured);
 CREATE INDEX IF NOT EXISTS idx_experiences_current ON experiences(is_current);
 CREATE INDEX IF NOT EXISTS idx_experiences_dates ON experiences(start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_educations_dates ON educations(start_date, end_date);
 CREATE INDEX IF NOT EXISTS idx_contact_messages_read ON contact_messages(is_read);
 CREATE INDEX IF NOT EXISTS idx_contact_messages_created ON contact_messages(created_at);
 CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);
