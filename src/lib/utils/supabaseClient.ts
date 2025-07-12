@@ -9,11 +9,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = 'https://ledrgyyfreebbncgdyvw.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlZHJneXlmcmVlYmJuY2dkeXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxMTA2MjksImV4cCI6MjA2NzY4NjYyOX0.Ab0bFNn8iMT6Lvmv420qmisA0_Zy1GaPeb6cR_FTD3o';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false
-  }
-});
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // 暫時使用同一個客戶端，直到我們解決 RLS 問題
 export const supabaseAdmin = supabase;
 

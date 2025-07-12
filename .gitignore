@@ -8,7 +8,6 @@ yarn-error.log*
 .svelte-kit/
 build/
 dist/
-.vercel/
 
 # Environment variables
 .env
@@ -60,3 +59,4 @@ jspm_packages/
 
 # Yarn Integrity file
 .yarn-integrity
+.vercel/

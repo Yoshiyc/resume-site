@@ -1,22 +1,36 @@
-<script>
-  console.log('首頁載入成功');
+<!--
+  首頁元件
+  展示網站歡迎訊息和簡介
+-->
+<script lang="ts">
+  // 可以在這裡加入任何需要的邏輯
 </script>
 
 <svelte:head>
   <title>首頁 - Resume Site</title>
 </svelte:head>
 
-<div style="padding: 40px; text-align: center; font-family: Arial, sans-serif;">
-  <h1 style="color: #333; margin-bottom: 20px;">🚀 Resume Site</h1>
-  <p style="color: #666; margin-bottom: 20px;">網站部署成功！</p>
-  <p style="color: #666;">SvelteKit 應用正常運行中...</p>
-
-  <div style="margin-top: 30px;">
-    <a href="/about" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">關於我</a>
-    <a href="/projects" style="background: #10b981; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">作品集</a>
-    <a href="/contact" style="background: #f59e0b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">聯絡我</a>
+<!-- 英雄區塊 -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        歡迎來到我的作品集
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 text-blue-100">
+        展示我的專案作品與技術能力
+      </p>
+      <div class="space-x-4">
+        <a href="/projects" class="btn-primary bg-white text-blue-600 hover:bg-gray-100">
+          查看作品
+        </a>
+        <a href="/about" class="btn-secondary bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600">
+          關於我
+        </a>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
 <!-- 特色區塊 -->
 <section class="py-16">
