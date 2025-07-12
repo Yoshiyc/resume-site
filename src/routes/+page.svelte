@@ -4,6 +4,7 @@
 -->
 <script lang="ts">
   // 可以在這裡加入任何需要的邏輯
+  console.log('首頁載入成功');
 </script>
 
 <svelte:head>

@@ -8,19 +8,12 @@ import { submitContactMessage, getAboutMe } from '$lib/utils/supabaseClient';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-  try {
-    // 載入個人聯絡資訊
-    const aboutMe = await getAboutMe();
-    
-    return {
-      aboutMe
-    };
-  } catch (error) {
-    console.error('Failed to load contact page data:', error);
-    return {
-      aboutMe: null
-    };
-  }
+  // 暫時返回空資料以避免 Vercel 部署問題
+  console.log('Loading contact page...');
+
+  return {
+    aboutMe: null
+  };
 };
 
 export const actions: Actions = {

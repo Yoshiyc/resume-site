@@ -3,42 +3,23 @@
  * 載入個人資訊、技能和工作經歷
  */
 
-import { getAboutMe, getSkills, getExperiences, getEducations, upsertEducation, deleteEducation } from '$lib/utils/supabaseClient';
+import { upsertEducation, deleteEducation, type Education } from '$lib/utils/supabaseClient';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-  try {
-    // 檢查是否已登入
-    const isAuthenticated = cookies.get('admin_authenticated') === 'true';
+  // 暫時返回靜態資料以避免 Vercel 部署問題
+  console.log('Loading about page...');
 
-    // 並行載入所有資料
-    const [aboutMe, skills, experiences, educations] = await Promise.all([
-      getAboutMe(),
-      getSkills(),
-      getExperiences(),
-      getEducations()
-    ]);
+  const isAuthenticated = cookies.get('admin_authenticated') === 'true';
 
-    return {
-      aboutMe,
-      skills,
-      experiences,
-      educations,
-      isAuthenticated
-    };
-  } catch (error) {
-    console.error('Failed to load about page data:', error);
-
-    // 如果載入失敗，返回空資料避免頁面崩潰
-    return {
-      aboutMe: null,
-      skills: [],
-      experiences: [],
-      educations: [],
-      isAuthenticated: false
-    };
-  }
+  return {
+    aboutMe: null,
+    skills: [],
+    experiences: [],
+    educations: [],
+    isAuthenticated
+  };
 };
 
 export const actions: Actions = {
