@@ -5,6 +5,7 @@
 
 import { fail } from '@sveltejs/kit';
 import { submitContactMessage, getAboutMe } from '$lib/utils/supabaseClient';
+import { sendContactEmail, validateSESConfig } from '$lib/utils/emailService';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -55,19 +56,22 @@ export const actions: Actions = {
         });
       }
 
-      // 提交到 Supabase
-      const success = await submitContactMessage({
+      // 準備聯絡資料
+      const contactData = {
         name,
         email,
         subject,
         message,
         ip_address: getClientAddress(),
         user_agent: request.headers.get('user-agent') || undefined
-      });
+      };
 
-      if (!success) {
+      // 驗證 AWS SES 設定
+      const sesConfigValid = await validateSESConfig();
+      if (!sesConfigValid) {
+        console.error('AWS SES configuration is invalid');
         return fail(500, {
-          error: '訊息發送失敗，請稍後再試',
+          error: 'Email 服務設定錯誤，請稍後再試',
           name,
           email,
           subject,
@@ -75,9 +79,49 @@ export const actions: Actions = {
         });
       }
 
+      // 並行處理：同時發送 email 和儲存到資料庫
+      const [emailResult, dbResult] = await Promise.allSettled([
+        sendContactEmail(contactData),
+        submitContactMessage(contactData)
+      ]);
+
+      // 檢查 email 發送結果
+      let emailSuccess = false;
+      let emailError = '';
+
+      if (emailResult.status === 'fulfilled') {
+        emailSuccess = emailResult.value.success;
+        emailError = emailResult.value.error || '';
+      } else {
+        emailError = emailResult.reason?.message || '發送失敗';
+      }
+
+      // 檢查資料庫儲存結果
+      let dbSuccess = false;
+      if (dbResult.status === 'fulfilled') {
+        dbSuccess = dbResult.value;
+      }
+
+      // 如果 email 發送失敗，返回錯誤
+      if (!emailSuccess) {
+        console.error('Email sending failed:', emailError);
+        return fail(500, {
+          error: `訊息發送失敗：${emailError}`,
+          name,
+          email,
+          subject,
+          message
+        });
+      }
+
+      // 如果資料庫儲存失敗，記錄警告但不影響用戶體驗
+      if (!dbSuccess) {
+        console.warn('Database storage failed, but email was sent successfully');
+      }
+
       return {
         success: true,
-        message: '訊息已成功發送！我會盡快回覆您。'
+        message: '訊息已成功發送到我的信箱！我會盡快回覆您。'
       };
 
     } catch (error) {
