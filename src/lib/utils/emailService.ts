@@ -200,21 +200,37 @@ ${user_agent ? `瀏覽器：${user_agent}` : ''}
 
 /**
  * 驗證 AWS SES 設定
- * @returns Promise<boolean> 設定是否正確
+ * @returns Promise<{valid: boolean, details: any}> 設定詳情
  */
-export async function validateSESConfig(): Promise<boolean> {
+export async function validateSESConfig(): Promise<{valid: boolean, details: any}> {
   try {
     const accessKeyId = env.AWS_ACCESS_KEY_ID;
     const secretAccessKey = env.AWS_SECRET_ACCESS_KEY;
-    
+
+    const details = {
+      hasAccessKeyId: !!accessKeyId,
+      hasSecretAccessKey: !!secretAccessKey,
+      accessKeyIdLength: accessKeyId?.length || 0,
+      secretAccessKeyLength: secretAccessKey?.length || 0,
+      accessKeyIdPreview: accessKeyId ? `${accessKeyId.substring(0, 4)}...${accessKeyId.substring(accessKeyId.length - 4)}` : 'NOT_SET',
+      region: 'ap-southeast-2'
+    };
+
+    console.log('AWS SES Configuration Details:', details);
+
     if (!accessKeyId || !secretAccessKey) {
       console.error('AWS credentials not found in environment variables');
-      return false;
+      return { valid: false, details };
     }
-    
-    return true;
+
+    if (accessKeyId === 'your_aws_access_key_id_here' || secretAccessKey === 'your_aws_secret_access_key_here') {
+      console.error('AWS credentials are still using placeholder values');
+      return { valid: false, details: { ...details, error: 'Placeholder values detected' } };
+    }
+
+    return { valid: true, details };
   } catch (error) {
     console.error('SES configuration validation failed:', error);
-    return false;
+    return { valid: false, details: { error: error instanceof Error ? error.message : 'Unknown error' } };
   }
 }

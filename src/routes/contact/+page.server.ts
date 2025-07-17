@@ -67,11 +67,13 @@ export const actions: Actions = {
       };
 
       // 驗證 AWS SES 設定
-      const sesConfigValid = await validateSESConfig();
-      if (!sesConfigValid) {
-        console.error('AWS SES configuration is invalid');
+      const sesConfigResult = await validateSESConfig();
+      console.log('SES Config Validation Result:', sesConfigResult);
+
+      if (!sesConfigResult.valid) {
+        console.error('AWS SES configuration is invalid:', sesConfigResult.details);
         return fail(500, {
-          error: 'Email 服務設定錯誤，請稍後再試',
+          error: `Email 服務設定錯誤：${sesConfigResult.details.error || '請檢查 AWS 憑證設定'}`,
           name,
           email,
           subject,

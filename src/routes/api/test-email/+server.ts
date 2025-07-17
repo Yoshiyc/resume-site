@@ -10,11 +10,14 @@ import type { RequestHandler } from './$types';
 export const POST: RequestHandler = async ({ request }) => {
   try {
     // 驗證 SES 設定
-    const configValid = await validateSESConfig();
-    if (!configValid) {
+    const configResult = await validateSESConfig();
+    console.log('Test Email - SES Config Result:', configResult);
+
+    if (!configResult.valid) {
       return json({
         success: false,
-        error: 'AWS SES 設定無效，請檢查環境變數'
+        error: 'AWS SES 設定無效，請檢查環境變數',
+        details: configResult.details
       }, { status: 500 });
     }
 
