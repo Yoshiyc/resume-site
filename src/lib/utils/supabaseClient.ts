@@ -124,6 +124,32 @@ export interface SiteSetting {
   updated_at: string;
 }
 
+// Vibe Coding 學習步驟型別
+export interface LearningStep {
+  id: number;
+  step_number: string; // 例如 "1️⃣"
+  title: string;
+  description: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// 開發社群型別
+export interface DevCommunity {
+  id: number;
+  icon_url: string;
+  name: string;
+  description: string;
+  website_url?: string;
+  join_date?: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // ===== 資料操作函數 =====
 
 /**
@@ -248,6 +274,46 @@ export async function getEducations(): Promise<Education[]> {
     return data || [];
   } catch (error) {
     console.error('Failed to fetch educations:', error);
+    return [];
+  }
+}
+
+/**
+ * 獲取 Vibe Coding 學習步驟
+ * @returns Promise<LearningStep[]> 學習步驟列表
+ */
+export async function getLearningSteps(): Promise<LearningStep[]> {
+  try {
+    const { data, error } = await supabase
+      .from('learning_steps')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Failed to fetch learning steps:', error);
+    return [];
+  }
+}
+
+/**
+ * 獲取開發社群列表
+ * @returns Promise<DevCommunity[]> 開發社群列表
+ */
+export async function getDevCommunities(): Promise<DevCommunity[]> {
+  try {
+    const { data, error } = await supabase
+      .from('dev_communities')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Failed to fetch dev communities:', error);
     return [];
   }
 }

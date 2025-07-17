@@ -10,7 +10,7 @@
 
   export let data: PageData;
 
-  $: ({ aboutMe, skills, experiences, educations, isAuthenticated } = data);
+  $: ({ aboutMe, skills, experiences, educations, learningSteps, devCommunities, isAuthenticated } = data);
 
   // 移除分類邏輯，直接使用所有技能統一顯示
 
@@ -429,6 +429,80 @@
     {:else}
       <div class="text-center py-12">
         <p class="text-gray-500">暫無學歷資料</p>
+      </div>
+    {/if}
+  </div>
+</section>
+
+<!-- Vibe Coding 學習流程區塊 -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">🧠 Vibe Coding 學習流程</h2>
+      <p class="text-lg text-gray-600">我的程式學習方法與步驟</p>
+    </div>
+
+    {#if learningSteps && learningSteps.length > 0}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {#each learningSteps as step}
+          <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+            <div class="flex items-center mb-4">
+              <span class="text-2xl mr-3">{step.step_number}</span>
+              <h3 class="text-xl font-semibold text-gray-900">{step.title}</h3>
+            </div>
+            <p class="text-gray-600 leading-relaxed">{step.description}</p>
+          </div>
+        {/each}
+      </div>
+    {:else}
+      <div class="text-center py-12">
+        <p class="text-gray-500">暫無學習流程資料</p>
+      </div>
+    {/if}
+  </div>
+</section>
+
+<!-- 已加入的開發社群區塊 -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">🌐 已加入的開發社群</h2>
+      <p class="text-lg text-gray-600">我參與的技術社群與平台</p>
+    </div>
+
+    {#if devCommunities && devCommunities.length > 0}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {#each devCommunities as community}
+          <div class="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors duration-300 text-center">
+            <div class="mb-4">
+              <img
+                src={community.icon_url}
+                alt={community.name}
+                class="w-12 h-12 mx-auto filter grayscale hover:grayscale-0 transition-all duration-300"
+                loading="lazy"
+              />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{community.name}</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">{community.description}</p>
+            {#if community.website_url}
+              <a
+                href={community.website_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                訪問社群
+                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            {/if}
+          </div>
+        {/each}
+      </div>
+    {:else}
+      <div class="text-center py-12">
+        <p class="text-gray-500">暫無社群資料</p>
       </div>
     {/if}
   </div>

@@ -3,7 +3,7 @@
  * 載入個人資訊、技能和工作經歷
  */
 
-import { getAboutMe, getSkills, getExperiences, getEducations, upsertEducation, deleteEducation } from '$lib/utils/supabaseClient';
+import { getAboutMe, getSkills, getExperiences, getEducations, getLearningSteps, getDevCommunities, upsertEducation, deleteEducation } from '$lib/utils/supabaseClient';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -13,11 +13,13 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const isAuthenticated = cookies.get('admin_authenticated') === 'true';
 
     // 並行載入所有資料
-    const [aboutMe, skills, experiences, educations] = await Promise.all([
+    const [aboutMe, skills, experiences, educations, learningSteps, devCommunities] = await Promise.all([
       getAboutMe(),
       getSkills(),
       getExperiences(),
-      getEducations()
+      getEducations(),
+      getLearningSteps(),
+      getDevCommunities()
     ]);
 
     return {
@@ -25,6 +27,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
       skills,
       experiences,
       educations,
+      learningSteps,
+      devCommunities,
       isAuthenticated
     };
   } catch (error) {
@@ -36,6 +40,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
       skills: [],
       experiences: [],
       educations: [],
+      learningSteps: [],
+      devCommunities: [],
       isAuthenticated: false
     };
   }
